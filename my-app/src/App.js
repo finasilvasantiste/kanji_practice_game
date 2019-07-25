@@ -21,7 +21,10 @@ class App extends Component {
     event.preventDefault();
     fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
       .then(response => response.json())
-      .then(state => this.setState(state));
+      .then(response => {
+            console.log(response);
+            });
+      // .then(state => this.setState(state));
   }
 
   render() {
