@@ -7,10 +7,29 @@ class App extends Component {
     super(props);
     this.state = {
       name: '',
-      greeting: ''
+      greeting: '',
+      data: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    fetch('/data').then(response => {
+      const decoder = new TextDecoder();
+      const reader = response.body.getReader();
+
+      // read() returns a promise that resolves
+      // when a value has been received
+      reader.read().then(function processResult(result) {
+        if (result.done) return;
+        console.log(
+          decoder.decode(result.value, {stream: true})
+        );
+        // Read some more, and recall this function
+        return reader.read().then(processResult);
+      });
+    });
   }
 
   handleChange(event) {
@@ -19,11 +38,12 @@ class App extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
-      .then(response => response.json())
-      .then(response => {
-            console.log(response);
-            });
+    console.log(this.state.data);
+    // fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
+    //   .then(response => response.json())
+    //   .then(response => {
+    //         console.log(response);
+    //         });
       // .then(state => this.setState(state));
   }
 
