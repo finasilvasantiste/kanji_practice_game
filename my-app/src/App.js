@@ -8,14 +8,15 @@ class App extends Component {
     this.state = {
       name: '',
       greeting: '',
-      data: ''
+      data: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    fetch('/data').then(response => {
+    const that = this;
+    fetch('/data').then((response) => {
       const decoder = new TextDecoder();
       const reader = response.body.getReader();
 
@@ -23,9 +24,12 @@ class App extends Component {
       // when a value has been received
       reader.read().then(function processResult(result) {
         if (result.done) return;
-        console.log(
-          decoder.decode(result.value, {stream: true})
-        );
+        const data = JSON.parse(decoder.decode(result.value, {stream: true}));
+        console.log(data);
+
+        // Set state with data from csv
+        that.setState({data : data});
+
         // Read some more, and recall this function
         return reader.read().then(processResult);
       });
@@ -48,6 +52,10 @@ class App extends Component {
   }
 
   render() {
+    console.log('render');
+
+    console.log(this.state.data ? this.state.data[0] : this.state.data);
+
     return (
       <div className="App">
         <header className="App-header">
