@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import './App.css';
+import Button from 'react-bootstrap/Button';
 import FlashCard from './FlashCard';
 import shuffleIt from './shuffleLogic';
 
@@ -52,15 +53,20 @@ class App extends Component {
     // console.log('render');
     // console.log(this.state.data ? this.state.data[0] : this.state.data);
 
+    const hasLoadedData = !!this.state.data;
+
     return (
-      <div className="App">
-        <div>
-          {this.state.data
-          ? <FlashCard data={this.state.data[this.state.currentFlashCard]}/>
+      <Fragment>
+        { hasLoadedData
+          ? <div className="App">
+              <div>
+                <FlashCard data={this.state.data[this.state.currentFlashCard]}/>
+                <Button variant="light">Next</Button>
+              </div>
+            </div>
           : null
-          }
-        </div>
-      </div>
+        }
+      </Fragment>
     );
   }
 }
