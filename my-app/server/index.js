@@ -2,7 +2,6 @@ const express = require('express');
 const request = require('request')
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-// const fs = require('fs');
 const app = express();
 const _ = require('lodash');
 
