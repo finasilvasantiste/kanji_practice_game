@@ -5,31 +5,25 @@ class FlashCard extends Component{
     super(props);
     this.state = {
       kanji: null,
-      meaning: null,
-      seen: false
+      meaning: null
     };
   }
 
   componentDidMount() {
     this.setState({
-      kanji: this.props.kanji,
-      meaning: this.props.meaning,
-      seen: this.props.seen
+      kanji: this.props.data['kanji'],
+      meaning: this.props.data['meaning']
     })
   }
 
   render() {
     const kanji = this.state.kanji;
     const meaning = this.state.meaning;
-    const seen = this.state.seen;
-
-    // console.log(kanji, meaning, seen);
 
     return (
-      <div className={'flash_card'}>
-      <span className={'kanji'}>{kanji}</span>
-      <span className={'meaning'}>{meaning}</span>
-      <span className={'seen'}>{seen ? 'True' : 'False'}</span>
+      <div className="flashCard">
+      <span className="kanji">{kanji}</span>
+      <span className="meaning">{meaning}</span>
       </div>
     );
   }

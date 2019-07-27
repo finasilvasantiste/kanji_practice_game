@@ -1,5 +1,5 @@
 // Fisher–Yates shuffle
-function shuffle (array) {
+function shuffleIt (array) {
   var i = 0
     , j = 0
     , temp = null
@@ -14,4 +14,4 @@ function shuffle (array) {
   return array;
 }
 
-export default shuffle;
+export default shuffleIt;
