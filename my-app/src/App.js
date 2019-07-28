@@ -4,12 +4,13 @@ import Button from 'react-bootstrap/Button';
 import FlashCard from './FlashCard';
 import shuffleIt from './shuffleLogic';
 
+let data;
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data : null,
-      order : null,
+      deckOrder : null,
       currentFlashCard : {
         kanji : null,
         meaning : null,
@@ -32,16 +33,15 @@ class App extends Component {
       // when a value has been received
       reader.read().then(function processResult(result) {
         if (result.done) return;
-        const data = JSON.parse(decoder.decode(result.value, {stream: true}));
-        const order = that.shuffleFlashCardOrder(data);
+        data = JSON.parse(decoder.decode(result.value, {stream: true}));
+        const deckOrder = that.shuffleFlashCardOrder(data);
 
         // Set state with data from csv
         that.setState({
-          data : data,
-          order : order,
+          deckOrder : deckOrder,
           });
 
-        that.setCurrentFlashCard(order);
+        that.setCurrentFlashCard(deckOrder);
 
         // Read some more, and recall this function
         return reader.read().then(processResult);
@@ -49,18 +49,38 @@ class App extends Component {
     });
   }
 
-  setCurrentFlashCard(order){
+  setCurrentFlashCard(deckOrder){
     this.setState({
+      deckOrder: deckOrder,
       currentFlashCard : {
-        kanji : this.state.data[order[0]]['kanji'],
-        meaning : this.state.data[order[0]]['meaning'],
+        kanji : data[deckOrder[0]]['kanji'],
+        meaning : data[deckOrder[0]]['meaning'],
         index : 0,
       }
     });
   }
 
+  getNextFlashCard(nextFlashCardIndex){
+    const nextKanji = data[this.state.deckOrder[nextFlashCardIndex]]['kanji'];
+    const nextMeaning = data[this.state.deckOrder[nextFlashCardIndex]]['meaning'];
+
+    console.log('deckorder:');
+    console.log(this.state.deckOrder);
+    console.log('nextFlashCardIndex ' + nextFlashCardIndex);
+    console.log('deckOrder[nextFlashCardIndex] ' + this.state.deckOrder[nextFlashCardIndex]);
+
+    this.setState({
+      currentFlashCard : {
+        kanji : nextKanji,
+        meaning : nextMeaning,
+        index : nextFlashCardIndex,
+      }
+    });
+
+  }
+
   // Shuffle deck
-  shuffleFlashCardOrder(data){
+  shuffleFlashCardOrder(){
     const sequentialNumbersUpToLength = Array.from(Array(data.length).keys());
     const shuffledOrder = shuffleIt(sequentialNumbersUpToLength);
 
@@ -69,18 +89,17 @@ class App extends Component {
   }
 
   handleButtonReShuffleClick(){
-    const newShuffledOrder = this.shuffleFlashCardOrder(this.state.data);
+    const newShuffledOrder = this.shuffleFlashCardOrder();
     this.setCurrentFlashCard(newShuffledOrder);
   }
 
   handleButtonNext(){
-    const currentFlashCard = this.state.currentFlashCard;
-
-    console.log(currentFlashCard);
+    const nextFlashCardIndex = this.state.currentFlashCard['index']+1;
+    this.getNextFlashCard(nextFlashCardIndex);
   }
 
   render() {
-    const hasLoadedData = !!this.state.data;
+    const hasLoadedData = !!data;
 
     return (
       <Fragment>
