@@ -24,7 +24,6 @@ class PracticeMode extends Component{
 
   componentDidMount() {
     const that = this;
-
     data = this.props.data;
     const deckOrder = that.shuffleFlashCardOrder(data);
 

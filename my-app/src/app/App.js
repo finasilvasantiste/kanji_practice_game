@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../css/App.css';
-import StartScreen from "./game/StartScreen";
+import GameModeSelector from "./game/GameModeSelector";
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class App extends Component {
     return (
       <div className="App">
         {hasLoadedData
-        ? <StartScreen data={this.state.data}/>
+        ? <GameModeSelector data={this.state.data}/>
         : null
         }
       </div>
