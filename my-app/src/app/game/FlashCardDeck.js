@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import shuffleIt from "./shuffleLogic";
 import FlashCard from "./FlashCard";
 import Button from "react-bootstrap/Button";
-import {ExamModeButtons, PracticeModeButtons} from "./gameModeButtonCollection";
+import {ExamModeButtons, PracticeModeButtons} from "./buttons/buttonCollection";
 
 let data;
 
@@ -11,7 +11,9 @@ class FlashCardDeck extends Component{
     super(props);
     this.state = {
       deckOrder: null,
+      deckLength: null,
       hasFinishedDeck: false,
+      rememberedKanji: 0,
       currentFlashCard: {
         kanji: null,
         meaning: null,
@@ -21,6 +23,7 @@ class FlashCardDeck extends Component{
 
     this.handleButtonReShuffleClick = this.handleButtonReShuffleClick.bind(this);
     this.handleButtonNext = this.handleButtonNext.bind(this);
+    this.handleButtonRemember = this.handleButtonRemember.bind(this);
   }
 
   componentDidMount() {
@@ -29,7 +32,8 @@ class FlashCardDeck extends Component{
     const deckOrder = that.shuffleFlashCardOrder(data);
 
     that.setState({
-      deckOrder: deckOrder
+      deckOrder: deckOrder,
+      deckLength: data.length
     });
 
     that.setCurrentFlashCard(deckOrder);
@@ -70,9 +74,13 @@ class FlashCardDeck extends Component{
 
     if (this.state.hasFinishedDeck) {
       this.setState({
-        hasFinishedDeck: false
+        hasFinishedDeck: false,
       })
     }
+
+    this.setState({
+      rememberedKanji: 0
+    })
   }
 
   handleButtonNext(){
@@ -87,10 +95,31 @@ class FlashCardDeck extends Component{
     }
   }
 
+  handleButtonRemember(){
+    const newRememberedKanji = this.state.rememberedKanji+1;
+    const deckLength = this.state.deckLength;
+    const hasFinishedDeck = this.state.hasFinishedDeck;
+
+    if(newRememberedKanji > deckLength){
+      return
+    }else if(hasFinishedDeck){
+      return
+    }
+
+    this.setState({
+      rememberedKanji: newRememberedKanji,
+    })
+
+    this.handleButtonNext();
+  }
+
   render() {
     const hasFinishedDeck = this.state.hasFinishedDeck;
     const currentKanji = this.state.currentFlashCard.kanji;
     const currentMeaning = this.state.currentFlashCard.meaning;
+    const rememberedKanji = this.state.rememberedKanji;
+    const deckLength = this.state.deckLength;
+
     const practiceMode = this.props.practiceMode;
     const examMode = this.props.examMode;
 
@@ -104,7 +133,10 @@ class FlashCardDeck extends Component{
             : null
           }
           {!practiceMode && examMode
-            ? <ExamModeButtons handleButtonNext={this.handleButtonNext}/>
+            ? <ExamModeButtons handleButtonNext={this.handleButtonNext}
+                handleButtonRemember={this.handleButtonRemember}
+                rememberedKanji={rememberedKanji} deckLength={deckLength}
+              />
             : null
           }
           {hasFinishedDeck
