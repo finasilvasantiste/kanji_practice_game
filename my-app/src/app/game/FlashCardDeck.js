@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import shuffleIt from "./shuffleLogic";
 import FlashCard from "./FlashCard";
 import Button from "react-bootstrap/Button";
+import {ExamModeButtons, PracticeModeButtons} from "./gameModeButtonCollection";
 
 let data;
 
@@ -77,7 +78,6 @@ class FlashCardDeck extends Component{
   handleButtonNext(){
     const nextFlashCardIndex = this.state.currentFlashCard['index']+1;
 
-    console.log(this.state.hasFinishedDeck);
     if(nextFlashCardIndex < data.length){
       this.setNextFlashCard(nextFlashCardIndex);
     } else {
@@ -99,12 +99,18 @@ class FlashCardDeck extends Component{
         <div>
           <FlashCard kanji={currentKanji} meaning={currentMeaning}/>
           <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
+          {practiceMode && !examMode
+            ? <PracticeModeButtons handleButtonNext={this.handleButtonNext}/>
+            : null
+          }
+          {!practiceMode && examMode
+            ? <ExamModeButtons handleButtonNext={this.handleButtonNext}/>
+            : null
+          }
           {hasFinishedDeck
             ? <span className="finished_deck">You've finished this deck!</span>
-            : null}
-          {practiceMode && !examMode
-          ? <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
-          : null}
+            : null
+          }
         </div>
       </div>
     );
