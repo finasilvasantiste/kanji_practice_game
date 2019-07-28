@@ -8,7 +8,7 @@ class FlashCard extends Component{
     this.state = {
       kanji: null,
       meaning: null,
-      showMeaning : false,
+      showMeaning: false,
     };
 
     this.handleButtonShowMeaning = this.handleButtonShowMeaning.bind(this);
@@ -32,12 +32,15 @@ class FlashCard extends Component{
 
   render() {
     const visibility = this.state.showMeaning ? 'Hide' : 'Show';
+    const showMeaning = this.state.showMeaning;
+    const kanji = this.state.kanji;
+    const meaning = this.state.meaning;
 
     return (
       <div className="flashCard">
-      <span className="kanji">{this.props.kanji}</span>
-        {this.state.showMeaning
-        ? <span className="meaning">{this.props.meaning}</span>
+      <span className="kanji">{kanji}</span>
+        {showMeaning
+        ? <span className="meaning">{meaning}</span>
         : null
         }
       <Button variant="light" onClick={this.handleButtonShowMeaning}>{visibility} meaning</Button>

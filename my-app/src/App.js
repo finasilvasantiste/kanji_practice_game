@@ -10,11 +10,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deckOrder : null,
-      currentFlashCard : {
-        kanji : null,
-        meaning : null,
-        index : null
+      deckOrder: null,
+      hasFinishedDeck: false,
+      currentFlashCard: {
+        kanji: null,
+        meaning: null,
+        index: null
       },
     };
 
@@ -51,10 +52,10 @@ class App extends Component {
   setCurrentFlashCard(deckOrder){
     this.setState({
       deckOrder: deckOrder,
-      currentFlashCard : {
-        kanji : data[deckOrder[0]]['kanji'],
-        meaning : data[deckOrder[0]]['meaning'],
-        index : 0,
+      currentFlashCard: {
+        kanji: data[deckOrder[0]]['kanji'],
+        meaning: data[deckOrder[0]]['meaning'],
+        index: 0,
       }
     });
   }
@@ -64,13 +65,21 @@ class App extends Component {
     const nextMeaning = data[this.state.deckOrder[nextFlashCardIndex]]['meaning'];
 
     this.setState({
-      currentFlashCard : {
-        kanji : nextKanji,
-        meaning : nextMeaning,
-        index : nextFlashCardIndex,
+      currentFlashCard: {
+        kanji: nextKanji,
+        meaning: nextMeaning,
+        index: nextFlashCardIndex,
       }
     });
 
+  }
+
+  setFinishedDeck(){
+    const completionStage = !this.state.hasFinishedDeck;
+
+    this.setState({
+      hasFinishedDeck: completionStage
+    })
   }
 
   // Shuffle deck
@@ -85,6 +94,9 @@ class App extends Component {
   handleButtonReShuffleClick(){
     const newShuffledOrder = this.shuffleFlashCardOrder();
     this.setCurrentFlashCard(newShuffledOrder);
+    if (this.state.hasFinishedDeck) {
+      this.setFinishedDeck();
+    }
   }
 
   handleButtonNext(){
@@ -93,21 +105,27 @@ class App extends Component {
     if(nextFlashCardIndex < data.length){
       this.getNextFlashCard(nextFlashCardIndex);
     } else {
-      console.log('Finished deck!'); //Display message
+      this.setFinishedDeck();
     }
   }
 
   render() {
     const hasLoadedData = !!data;
+    const hasFinishedDeck = this.state.hasFinishedDeck;
+    const currentKanji = this.state.currentFlashCard.kanji;
+    const currentMeaning = this.state.currentFlashCard.meaning;
 
     return (
       <Fragment>
         { hasLoadedData
           ? <div className="App">
               <div>
-                <FlashCard kanji={this.state.currentFlashCard.kanji} meaning={this.state.currentFlashCard.meaning}/>
+                <FlashCard kanji={currentKanji} meaning={currentMeaning}/>
                 <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
                 <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
+                {hasFinishedDeck
+                ? <span className="finished_deck">You've finished this deck!</span>
+                : null}
               </div>
             </div>
           : null
