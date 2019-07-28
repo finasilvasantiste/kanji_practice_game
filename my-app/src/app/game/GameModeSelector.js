@@ -41,11 +41,11 @@ class GameModeSelector extends Component {
         <Button variant="dark" onClick={this.handlePracticeModeButton}>Practice Mode</Button>
         <Button variant="dark" onClick={this.handleExamModeButton}>Exam Mode</Button>
         { practiceMode && !examMode
-        ? <PracticeMode data={data}/>
+        ? <PracticeMode data={data} practiceMode={practiceMode} examMode={examMode}/>
         : null
         }
         { !practiceMode && examMode
-        ? <ExamMode/>
+        ? <ExamMode data={data} practiceMode={practiceMode} examMode={examMode}/>
         : null
         }
       </div>

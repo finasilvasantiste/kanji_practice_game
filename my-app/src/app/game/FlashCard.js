@@ -50,7 +50,7 @@ class FlashCard extends Component{
         ? <span className="meaning">{meaning}</span>
         : null
         }
-      <Button variant="light" onClick={this.handleButtonShowMeaning}>{visibility} meaning</Button>
+      <Button variant="danger" onClick={this.handleButtonShowMeaning}>{visibility} meaning</Button>
       </div>
     );
   }

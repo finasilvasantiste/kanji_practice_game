@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import shuffleIt from "./shuffleLogic";
 import FlashCard from "./FlashCard";
 import Button from "react-bootstrap/Button";
-import FlashCardDeck from "./FlashCardDeck";
 
 let data;
 
-class PracticeMode extends Component{
+class FlashCardDeck extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +28,7 @@ class PracticeMode extends Component{
     const deckOrder = that.shuffleFlashCardOrder(data);
 
     that.setState({
-      deckOrder : deckOrder,
+      deckOrder: deckOrder
     });
 
     that.setCurrentFlashCard(deckOrder);
@@ -96,17 +95,24 @@ class PracticeMode extends Component{
     const hasFinishedDeck = this.state.hasFinishedDeck;
     const currentKanji = this.state.currentFlashCard.kanji;
     const currentMeaning = this.state.currentFlashCard.meaning;
-    const data = this.props.data;
     const practiceMode = this.props.practiceMode;
     const examMode = this.props.examMode;
 
     return (
-      <div className="practice_mode">
-        <span>Practice Mode</span>
-        <FlashCardDeck data={data} practiceMode={practiceMode} examMode={examMode}/>
+      <div className="flash_card_deck">
+        <div>
+          <FlashCard kanji={currentKanji} meaning={currentMeaning}/>
+          <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
+          {hasFinishedDeck
+            ? <span className="finished_deck">You've finished this deck!</span>
+            : null}
+          {practiceMode && ! examMode
+          ? <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
+          : null}
+        </div>
       </div>
     );
   }
 }
 
-export default PracticeMode;
+export default FlashCardDeck;
