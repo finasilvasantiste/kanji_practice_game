@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import PracticeMode from "./PracticeMode";
 
 class StartScreen extends Component {

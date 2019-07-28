@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import shuffleIt from "./shuffleLogic";
 import FlashCard from "./FlashCard";
 import Button from "react-bootstrap/Button";

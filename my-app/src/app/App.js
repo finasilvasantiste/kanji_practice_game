@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react';
-import './App.css';
-import StartScreen from "./StartScreen";
+import React, {Component} from 'react';
+import '../css/App.css';
+import StartScreen from "./game/StartScreen";
 
 class App extends Component {
   constructor(props) {

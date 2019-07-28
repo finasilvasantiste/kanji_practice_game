@@ -1,6 +1,6 @@
 // Fisher–Yates shuffle
 function shuffle (array) {
-  var i = 0
+  let i = 0
     , j = 0
     , temp = null
 
@@ -18,8 +18,6 @@ function shuffleIt(dataLength){
   const sequentialNumbersUpToLength = Array.from(Array(dataLength).keys());
   const shuffledOrder = shuffle(sequentialNumbersUpToLength);
 
-  console.log('shuffledOrder');
-  console.log(shuffledOrder);
   return shuffledOrder;
 }
 
