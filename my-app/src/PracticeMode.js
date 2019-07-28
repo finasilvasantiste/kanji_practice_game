@@ -46,7 +46,7 @@ class PracticeMode extends Component{
     });
   }
 
-  getNextFlashCard(nextFlashCardIndex){
+  setNextFlashCard(nextFlashCardIndex){
     const nextKanji = data[this.state.deckOrder[nextFlashCardIndex]]['kanji'];
     const nextMeaning = data[this.state.deckOrder[nextFlashCardIndex]]['meaning'];
 
@@ -68,19 +68,15 @@ class PracticeMode extends Component{
     })
   }
 
-  // Shuffle deck
-  shuffleFlashCardOrder(){
-    const sequentialNumbersUpToLength = Array.from(Array(data.length).keys());
-    const shuffledOrder = shuffleIt(sequentialNumbersUpToLength);
 
-    console.log('shuffledOrder');
-    console.log(shuffledOrder);
-    return shuffledOrder;
+  shuffleFlashCardOrder(){
+    return shuffleIt(data.length);
   }
 
   handleButtonReShuffleClick(){
     const newShuffledOrder = this.shuffleFlashCardOrder();
     this.setCurrentFlashCard(newShuffledOrder);
+
     if (this.state.hasFinishedDeck) {
       this.setFinishedDeck();
     }
@@ -90,34 +86,29 @@ class PracticeMode extends Component{
     const nextFlashCardIndex = this.state.currentFlashCard['index']+1;
 
     if(nextFlashCardIndex < data.length){
-      this.getNextFlashCard(nextFlashCardIndex);
+      this.setNextFlashCard(nextFlashCardIndex);
     } else {
       this.setFinishedDeck();
     }
   }
 
   render() {
-    const hasLoadedData = !!data;
     const hasFinishedDeck = this.state.hasFinishedDeck;
     const currentKanji = this.state.currentFlashCard.kanji;
     const currentMeaning = this.state.currentFlashCard.meaning;
 
     return (
-      <Fragment>
-        { hasLoadedData
-          ? <div className="App">
-            <div>
-              <FlashCard kanji={currentKanji} meaning={currentMeaning}/>
-              <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
-              <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
-              {hasFinishedDeck
-                ? <span className="finished_deck">You've finished this deck!</span>
-                : null}
-            </div>
-          </div>
-          : null
-        }
-      </Fragment>
+      <div className="practice_mode">
+        <span>Practice Mode</span>
+        <div>
+          <FlashCard kanji={currentKanji} meaning={currentMeaning}/>
+          <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
+          <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
+          {hasFinishedDeck
+            ? <span className="finished_deck">You've finished this deck!</span>
+            : null}
+        </div>
+      </div>
     );
   }
 }

@@ -37,12 +37,12 @@ class App extends Component {
     const hasLoadedData = !!this.state.data;
 
     return (
-    <Fragment>
-      {hasLoadedData
-      ? <StartScreen data={this.state.data}/>
-      : null
-      }
-    </Fragment>
+      <div className="App">
+        {hasLoadedData
+        ? <StartScreen data={this.state.data}/>
+        : null
+        }
+      </div>
     );
   }
 }

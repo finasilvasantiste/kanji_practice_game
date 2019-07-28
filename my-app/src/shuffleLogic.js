@@ -1,5 +1,5 @@
 // Fisher–Yates shuffle
-function shuffleIt (array) {
+function shuffle (array) {
   var i = 0
     , j = 0
     , temp = null
@@ -12,6 +12,15 @@ function shuffleIt (array) {
   }
 
   return array;
+}
+
+function shuffleIt(dataLength){
+  const sequentialNumbersUpToLength = Array.from(Array(dataLength).keys());
+  const shuffledOrder = shuffle(sequentialNumbersUpToLength);
+
+  console.log('shuffledOrder');
+  console.log(shuffledOrder);
+  return shuffledOrder;
 }
 
 export default shuffleIt;

@@ -9,10 +9,10 @@ class StartScreen extends Component {
   render() {
 
     return (
-      <Fragment>
+      <div className="start_screen">
         <span>Start Screen</span>
         <PracticeMode data={this.props.data}/>
-      </Fragment>
+      </div>
     );
   }
 }
