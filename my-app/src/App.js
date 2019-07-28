@@ -12,11 +12,13 @@ class App extends Component {
       order : null,
       currentFlashCard : {
         kanji : null,
-        meaning : null
+        meaning : null,
+        index : null
       },
     };
 
     this.handleButtonReShuffleClick = this.handleButtonReShuffleClick.bind(this);
+    this.handleButtonNext = this.handleButtonNext.bind(this);
   }
 
   componentDidMount() {
@@ -37,11 +39,9 @@ class App extends Component {
         that.setState({
           data : data,
           order : order,
-          currentFlashCard : {
-            kanji : data[order[0]]['kanji'],
-            meaning : data[order[0]]['meaning']
-            }
           });
+
+        that.setCurrentFlashCard(order);
 
         // Read some more, and recall this function
         return reader.read().then(processResult);
@@ -53,14 +53,13 @@ class App extends Component {
     this.setState({
       currentFlashCard : {
         kanji : this.state.data[order[0]]['kanji'],
-        meaning : this.state.data[order[0]]['meaning']
+        meaning : this.state.data[order[0]]['meaning'],
+        index : 0,
       }
     });
-
-    console.log(this.state.currentFlashCard);
   }
 
-  // Shuffle order
+  // Shuffle deck
   shuffleFlashCardOrder(data){
     const sequentialNumbersUpToLength = Array.from(Array(data.length).keys());
     const shuffledOrder = shuffleIt(sequentialNumbersUpToLength);
@@ -74,10 +73,13 @@ class App extends Component {
     this.setCurrentFlashCard(newShuffledOrder);
   }
 
-  render() {
-    // console.log('render');
-    // console.log(this.state.data ? this.state.data[0] : this.state.data);
+  handleButtonNext(){
+    const currentFlashCard = this.state.currentFlashCard;
 
+    console.log(currentFlashCard);
+  }
+
+  render() {
     const hasLoadedData = !!this.state.data;
 
     return (
@@ -87,6 +89,7 @@ class App extends Component {
               <div>
                 <FlashCard kanji={this.state.currentFlashCard.kanji} meaning={this.state.currentFlashCard.meaning}/>
                 <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
+                <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
               </div>
             </div>
           : null
