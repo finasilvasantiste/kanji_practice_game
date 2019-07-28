@@ -29,8 +29,7 @@ class App extends Component {
       const decoder = new TextDecoder();
       const reader = response.body.getReader();
 
-      // read() returns a promise that resolves
-      // when a value has been received
+      // read() returns a promise that resolves when a value has been received
       reader.read().then(function processResult(result) {
         if (result.done) return;
         data = JSON.parse(decoder.decode(result.value, {stream: true}));
@@ -64,11 +63,6 @@ class App extends Component {
     const nextKanji = data[this.state.deckOrder[nextFlashCardIndex]]['kanji'];
     const nextMeaning = data[this.state.deckOrder[nextFlashCardIndex]]['meaning'];
 
-    console.log('deckorder:');
-    console.log(this.state.deckOrder);
-    console.log('nextFlashCardIndex ' + nextFlashCardIndex);
-    console.log('deckOrder[nextFlashCardIndex] ' + this.state.deckOrder[nextFlashCardIndex]);
-
     this.setState({
       currentFlashCard : {
         kanji : nextKanji,
@@ -95,7 +89,12 @@ class App extends Component {
 
   handleButtonNext(){
     const nextFlashCardIndex = this.state.currentFlashCard['index']+1;
-    this.getNextFlashCard(nextFlashCardIndex);
+
+    if(nextFlashCardIndex < data.length){
+      this.getNextFlashCard(nextFlashCardIndex);
+    } else {
+      console.log('Finished deck!'); //Display message
+    }
   }
 
   render() {
