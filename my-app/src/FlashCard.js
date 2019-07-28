@@ -21,6 +21,13 @@ class FlashCard extends Component{
       showMeaning: visibility
     });
   }
+  componentDidMount(){
+    this.setState({
+      kanji: this.props.kanji,
+      meaning: this.props.meaning,
+      showMeaning: false,
+    })
+  }
 
   componentWillReceiveProps(nextProps){
     this.setState({
