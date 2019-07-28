@@ -9,21 +9,12 @@ class FlashCard extends Component{
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      kanji: this.props.data['kanji'],
-      meaning: this.props.data['meaning']
-    })
-  }
-
   render() {
-    const kanji = this.state.kanji;
-    const meaning = this.state.meaning;
 
     return (
       <div className="flashCard">
-      <span className="kanji">{kanji}</span>
-      <span className="meaning">{meaning}</span>
+      <span className="kanji">{this.props.kanji}</span>
+      <span className="meaning">{this.props.meaning}</span>
       </div>
     );
   }

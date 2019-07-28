@@ -8,10 +8,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
-      order: null,
-      currentFlashCard : null,
+      data : null,
+      order : null,
+      currentFlashCard : {
+        kanji : null,
+        meaning : null
+      },
     };
+
+    this.handleButtonReShuffleClick = this.handleButtonReShuffleClick.bind(this);
   }
 
   componentDidMount() {
@@ -26,13 +31,16 @@ class App extends Component {
       reader.read().then(function processResult(result) {
         if (result.done) return;
         const data = JSON.parse(decoder.decode(result.value, {stream: true}));
-        const order = that.setFlashCardOrder(data);
+        const order = that.shuffleFlashCardOrder(data);
 
         // Set state with data from csv
         that.setState({
           data : data,
           order : order,
-          currentFlashCard : order[0]
+          currentFlashCard : {
+            kanji : data[order[0]]['kanji'],
+            meaning : data[order[0]]['meaning']
+            }
           });
 
         // Read some more, and recall this function
@@ -41,12 +49,29 @@ class App extends Component {
     });
   }
 
+  setCurrentFlashCard(order){
+    this.setState({
+      currentFlashCard : {
+        kanji : this.state.data[order[0]]['kanji'],
+        meaning : this.state.data[order[0]]['meaning']
+      }
+    });
+
+    console.log(this.state.currentFlashCard);
+  }
+
   // Shuffle order
-  setFlashCardOrder(data){
+  shuffleFlashCardOrder(data){
     const sequentialNumbersUpToLength = Array.from(Array(data.length).keys());
     const shuffledOrder = shuffleIt(sequentialNumbersUpToLength);
 
+    console.log(shuffledOrder);
     return shuffledOrder;
+  }
+
+  handleButtonReShuffleClick(){
+    const newShuffledOrder = this.shuffleFlashCardOrder(this.state.data);
+    this.setCurrentFlashCard(newShuffledOrder);
   }
 
   render() {
@@ -60,8 +85,8 @@ class App extends Component {
         { hasLoadedData
           ? <div className="App">
               <div>
-                <FlashCard data={this.state.data[this.state.currentFlashCard]}/>
-                <Button variant="light">Next</Button>
+                <FlashCard kanji={this.state.currentFlashCard.kanji} meaning={this.state.currentFlashCard.meaning}/>
+                <Button variant="light" onClick={this.handleButtonReShuffleClick}>Reshuffle deck</Button>
               </div>
             </div>
           : null
