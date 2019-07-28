@@ -59,15 +59,6 @@ class FlashCardDeck extends Component{
 
   }
 
-  setFinishedDeck(){
-    const completionStage = !this.state.hasFinishedDeck;
-
-    this.setState({
-      hasFinishedDeck: completionStage
-    })
-  }
-
-
   shuffleFlashCardOrder(){
     return shuffleIt(data.length);
   }
@@ -77,17 +68,22 @@ class FlashCardDeck extends Component{
     this.setCurrentFlashCard(newShuffledOrder);
 
     if (this.state.hasFinishedDeck) {
-      this.setFinishedDeck();
+      this.setState({
+        hasFinishedDeck: false
+      })
     }
   }
 
   handleButtonNext(){
     const nextFlashCardIndex = this.state.currentFlashCard['index']+1;
 
+    console.log(this.state.hasFinishedDeck);
     if(nextFlashCardIndex < data.length){
       this.setNextFlashCard(nextFlashCardIndex);
     } else {
-      this.setFinishedDeck();
+      this.setState({
+        hasFinishedDeck: true
+      })
     }
   }
 
@@ -106,7 +102,7 @@ class FlashCardDeck extends Component{
           {hasFinishedDeck
             ? <span className="finished_deck">You've finished this deck!</span>
             : null}
-          {practiceMode && ! examMode
+          {practiceMode && !examMode
           ? <Button variant="light" onClick={this.handleButtonNext}>Next</Button>
           : null}
         </div>
